@@ -1,0 +1,53 @@
+import numpy as np 
+
+class NerualNetwok():
+    def __init__(self):
+        np.random.seed(1)
+        self.synaptic_weight=2*np.random.random((3,1))-1
+         
+    def sigmoid(self,x):
+        return 1/(1+np.exp(-x))
+    
+    def sigmoid_derivative(self,x):
+        return x*(1-x)
+
+    def train(self,training_input,training_output,training_iteration):
+        for iteration in range(training_iteration):
+            output=self.think(training_input)
+            
+            error=(training_output -output)
+            adjustment=error*self.sigmoid_derivative(output)
+            final_weight_change=np.dot(training_input.T,adjustment)
+            self.synaptic_weight += final_weight_change
+    
+    def think(self,inputs):
+        inputs=inputs.astype(float) 
+        "TODO: Add a check without float"
+        addition=np.dot(inputs,self.synaptic_weight)
+        return self.sigmoid(addition)
+    
+if __name__ == "__main__":
+    
+    neural_network=NerualNetwok()
+    
+    print("Random starting synaptic weights: ")
+    print(neural_network.synaptic_weight)
+    
+    traning_input =np.array([[0,0,1],
+                                [1,1,1],
+                                [1,0,1],
+                                [0,1,1]])
+    
+    training_output= np.array([[0,1,1,0]]).T
+    
+    neural_network.train(traning_input,training_output,10000)
+    
+    
+    A=str(input("Enter a number: "))
+    B=str(input("Enter a number: "))
+    C=str(input("Enter a number: "))
+    
+    print("New situation: ", A, B, C)
+    print("Output: ")
+    print(neural_network.think(np.array([A,B,C])))
+    
